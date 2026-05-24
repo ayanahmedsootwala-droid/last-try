@@ -1,26 +1,14 @@
-import { useState, useEffect } from 'react'
-import { supabase } from './utils/supabase'
+import { createClient } from '@supabase/supabase-js';
 
-export default function App() {
-  const [todos, setTodos] = useState([])
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-  useEffect(() => {
-    async function getTodos() {
-      const { data: todos } = await supabase.from('todos').select()
-
-      if (todos) {
-        setTodos(todos)
-      }
-    }
-
-    getTodos()
-  }, [])
-
-  return (
-    <ul>
-      {todos.map((todo) => (
-        <li key={todo.id}>{todo.name}</li>
-      ))}
-    </ul>
-  )
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    'Missing Supabase environment variables. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.',
+  );
 }
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
