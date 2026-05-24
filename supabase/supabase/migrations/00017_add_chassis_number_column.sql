@@ -1,1 +1,0 @@
-ALTER TABLE cars ADD COLUMN IF NOT EXISTS chassis_number text;

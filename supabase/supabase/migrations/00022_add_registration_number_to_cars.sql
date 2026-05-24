@@ -1,2 +1,0 @@
-
-ALTER TABLE cars ADD COLUMN registration_number text;
