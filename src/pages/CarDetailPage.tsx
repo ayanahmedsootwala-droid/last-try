@@ -27,6 +27,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import AiSpecsAssistant from '@/components/ai/AiSpecsAssistant';
 import { cn } from '@/lib/utils';
+import { buildPageTitle } from '@/lib/site-meta';
 
 export default function CarDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -163,8 +164,8 @@ export default function CarDetailPage() {
   return (
     <PublicLayout>
       <Helmet>
-        <title>{`${car.year} ${car.brand_name} ${car.model_name} — ${formatCurrency(car.price)} | XYZ Automobiles`}</title>
-        <meta name="description" content={car.description || `${car.year} ${car.brand_name} ${car.model_name}, ${car.mileage?.toLocaleString()} km, ${car.city}. Available at XYZ Automobiles.`} />
+        <title>{buildPageTitle(`${car.year} ${car.brand_name} ${car.model_name} - ${formatCurrency(car.price)}`, siteName)}</title>
+        <meta name="description" content={car.description || `${car.year} ${car.brand_name} ${car.model_name}, ${car.mileage?.toLocaleString()} km, ${car.city}. Available at ${siteName}.`} />
         <meta property="og:title" content={`${car.year} ${car.brand_name} ${car.model_name}`} />
         <meta property="og:image" content={images[0]} />
         <meta property="og:url" content={window.location.href} />

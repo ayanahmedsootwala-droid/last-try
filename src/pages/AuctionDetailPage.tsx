@@ -24,6 +24,8 @@ import { formatCurrency, formatDate } from '@/lib/utils-xyz';
 import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { buildPageTitle } from '@/lib/site-meta';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface BidEntry {
@@ -79,6 +81,7 @@ function Countdown({ endTime }: { endTime: string }) {
 
 export default function AuctionDetailPage() {
   const { t } = useLanguage();
+  const { getSetting } = useSiteSettings();
   const { id } = useParams<{ id: string }>();
   const { auction, loading } = useAuction(id!);
   const { user } = useAuth();
@@ -98,6 +101,7 @@ export default function AuctionDetailPage() {
   const [hasDeposit, setHasDeposit] = useState(false);
   const [depositSubmitting, setDepositSubmitting] = useState(false);
   const [lightbox, setLightbox] = useState(false);
+  const siteName = getSetting('site_name', 'Vertex Cars');
 
   const effectiveBid = auction?.current_bid ?? auction?.current_price ?? auction?.starting_bid ?? 0;
   const bidIncrement = auction?.bid_increment ?? 50000;
@@ -256,8 +260,8 @@ export default function AuctionDetailPage() {
   return (
     <PublicLayout>
       <Helmet>
-        <title>{`${auction.title} | XYZ Auctions`}</title>
-        <meta name="description" content={`Bid on ${auction.title}. Current bid: ${formatCurrency(effectiveBid)}`} />
+        <title>{buildPageTitle(`${auction.title} Auctions`, siteName)}</title>
+        <meta name="description" content={`Bid on ${auction.title} at ${siteName}. Current bid: ${formatCurrency(effectiveBid)}.`} />
       </Helmet>
 
       <div className="pt-[68px] min-h-screen">

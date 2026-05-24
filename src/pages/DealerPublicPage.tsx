@@ -16,9 +16,12 @@ import { formatCurrency } from '@/lib/utils-xyz';
 import { toast } from 'sonner';
 import type { Dealership, Car as CarType } from '@/types/types';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { buildPageTitle } from '@/lib/site-meta';
 
 export default function DealerPublicPage() {
   const { t } = useLanguage();
+  const { getSetting } = useSiteSettings();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [dealership, setDealership] = useState<Dealership | null>(null);
@@ -27,6 +30,7 @@ export default function DealerPublicPage() {
   const [stats, setStats] = useState({ total: 0, sold: 0, active: 0 });
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [sending, setSending] = useState(false);
+  const siteName = getSetting('site_name', 'Vertex Cars');
 
   useEffect(() => {
     if (!id) return;
@@ -79,8 +83,8 @@ export default function DealerPublicPage() {
   return (
     <PublicLayout>
       <Helmet>
-        <title>{`${dealership.name} | XYZ Automobiles Dealer`}</title>
-        <meta name="description" content={`${dealership.name} — Verified dealership on XYZ Automobiles. ${stats.active} vehicles available.`} />
+        <title>{buildPageTitle(dealership.name, siteName)}</title>
+        <meta name="description" content={`${dealership.name} is a verified dealership on ${siteName}. ${stats.active} vehicles available.`} />
       </Helmet>
       <div className="pt-[68px] min-h-screen">
         {/* Hero */}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import {
   Search, ChevronRight, ArrowRight, Shield, Award, Clock, TrendingUp,
   Sparkles, MapPin, Star, ChevronLeft, Zap, Car as CarIcon, Gavel
@@ -627,8 +628,18 @@ function HomeSections() {
 }
 
 export default function HomePage() {
+  const { getSetting } = useSiteSettings();
+  const siteName = getSetting('site_name', 'Vertex Cars');
+
   return (
     <PublicLayout>
+      <Helmet>
+        <title>{siteName}</title>
+        <meta
+          name="description"
+          content={`${siteName} is Pakistan's trusted marketplace for premium vehicles, verified listings, and live auctions.`}
+        />
+      </Helmet>
       <HeroSection />
       <div className="hero-bottom-bridge" aria-hidden="true" />
       <HomeSections />
